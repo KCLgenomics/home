@@ -1,0 +1,342 @@
+---
+import { siteConfig } from "../config";
+const hasServices = siteConfig.services && siteConfig.services.length > 0;
+---
+
+{
+  hasServices && (
+    <section id="services" class="p-8 sm:p-12 md:p-16 lg:p-24 bg-black">
+      <div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <div class="lg:col-span-4">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold" style="color: #FFFFFF;">
+              <span style="font-size: 0.9em;">🗃️</span> Services
+            </h2>
+          </div>
+
+          <div class="lg:col-span-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              {siteConfig.services.map((service, index) => (
+                <div class="service-card-wrapper">
+                  <button
+                    type="button"
+                    class="service-card group relative w-full h-full p-6 md:p-8 bg-black rounded-2xl border-2 border-dashed transition-all duration-300 hover:shadow-xl hover:-translate-y-1 text-left cursor-pointer"
+                    style="border-color: #54ccef;"
+                    data-service-id={`service-${index}`}
+                  >
+                    <div class="folder-icon absolute top-6 right-6 md:top-8 md:right-8 text-2xl transition-all duration-300"></div>
+
+                    <div class="space-y-4 pr-14 md:pr-16">
+                      <div>
+                        <span
+                          class="text-sm font-mono"
+                          style="color: #54ccef;"
+                        >
+                          0{index + 1}
+                        </span>
+                        <h3 class="text-xl md:text-2xl font-bold mt-2 leading-tight" style="color: #E0E0E0;">
+                          {service.name}
+                        </h3>
+                      </div>
+
+                      <p class="text-base leading-relaxed" style="color: #E0E0E0;">
+                        {service.description}
+                      </p>
+
+                      {service.skills && service.skills.length > 0 && (
+                        <div class="flex flex-wrap gap-2 pt-2">
+                          {service.skills.map((skill) => (
+                            <span class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 uppercase" style="background-color: #54ccef; color: #000000;">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+
+                  {/* Pop-out overlay */}
+                  <div
+                    class="service-overlay fixed inset-0 z-40 opacity-0 pointer-events-none transition-opacity duration-300"
+                    style="background-color: rgba(0, 0, 0, 0.9); backdrop-filter: blur(4px);"
+                    data-overlay-id={`service-${index}`}
+                  />
+
+                  {/* Pop-out sub-services modal */}
+                  <div
+                    class="service-modal fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none opacity-0 transition-all duration-300"
+                    data-modal-id={`service-${index}`}
+                  >
+                    <div class="service-modal-content bg-black rounded-3xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden transform scale-95 transition-all duration-300 border-2 border-dashed" style="border-color: #54ccef;">
+                      <div class="p-6 md:p-8 flex items-start justify-between">
+                        <div>
+                          <h3 class="text-2xl md:text-3xl font-bold" style="color: #54ccef;">
+                            {service.name}
+                          </h3>
+                          <p class="mt-2" style="color: #E0E0E0;">{service.description}</p>
+                        </div>
+                        <button
+                          type="button"
+                          class="close-modal flex-shrink-0 ml-4 w-10 h-10 flex items-center justify-center rounded-full transition-colors duration-200"
+                          style="background-color: #54ccef; color: #000000;"
+                          data-close-id={`service-${index}`}
+                        >
+                          <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <div class="p-6 md:p-8 overflow-y-auto max-h-[calc(85vh-140px)]">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                          {service.subServices?.map((subService) => {
+                            const SubComponent = subService.link ? "a" : "div";
+                            const linkProps = subService.link
+                              ? {
+                                  href: subService.link,
+                                  target: "_blank",
+                                  rel: "noopener noreferrer",
+                                }
+                              : {};
+                            const isExternalLink = subService.link && (subService.link.startsWith('http://') || subService.link.startsWith('https://'));
+                            const icon = isExternalLink ? '🖇️' : '📑';
+
+                            return (
+                              <SubComponent
+                                {...linkProps}
+                                class={`group/sub p-5 md:p-6 bg-black rounded-xl border-2 border-dashed transition-all duration-300 ${
+                                  subService.link
+                                    ? "hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+                                    : ""
+                                }`}
+                                style="border-color: #54ccef;"
+                              >
+                                <h4 class="text-lg font-bold mb-2 flex items-start gap-2" style="color: #E0E0E0;">
+                                  <span>{icon}</span>
+                                  <span>{subService.name}</span>
+                                </h4>
+                                <p class="text-sm leading-relaxed" style="color: #E0E0E0;">
+                                  {subService.description}
+                                </p>
+                                {subService.link && (
+                                  <div class="mt-3 flex items-center text-sm font-medium transition-colors duration-200" style="color: #54ccef;">
+                                    <span>Learn more</span>
+                                    <svg
+                                      class="w-4 h-4 ml-1 transition-transform duration-200 group-hover/sub:translate-x-1"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5l7 7-7 7"
+                                      />
+                                    </svg>
+                                  </div>
+                                )}
+                              </SubComponent>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  // Handle service card clicks and modal interactions
+  document.addEventListener("DOMContentLoaded", () => {
+    const serviceCards = document.querySelectorAll(".service-card");
+
+    serviceCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const serviceId = card.getAttribute("data-service-id");
+        const overlay = document.querySelector(
+          `[data-overlay-id="${serviceId}"]`
+        ) as HTMLElement;
+        const modal = document.querySelector(
+          `[data-modal-id="${serviceId}"]`
+        ) as HTMLElement;
+        const modalContent = modal?.querySelector(
+          ".service-modal-content"
+        ) as HTMLElement;
+
+        if (overlay && modal && modalContent) {
+          // Hide header
+          const header = document.getElementById("header");
+          if (header) {
+            header.style.display = "none";
+          }
+
+          // Show overlay and modal
+          overlay.classList.remove("pointer-events-none", "opacity-0");
+          overlay.classList.add("pointer-events-auto", "opacity-100");
+
+          modal.classList.remove("pointer-events-none", "opacity-0");
+          modal.classList.add("pointer-events-auto", "opacity-100");
+
+          // Animate modal content
+          setTimeout(() => {
+            modalContent.classList.remove("scale-95");
+            modalContent.classList.add("scale-100");
+          }, 10);
+
+          // Prevent body scroll
+          document.body.style.overflow = "hidden";
+        }
+      });
+    });
+
+    // Handle close button clicks
+    const closeButtons = document.querySelectorAll(".close-modal");
+    closeButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const closeId = button.getAttribute("data-close-id");
+        closeModal(closeId);
+      });
+    });
+
+    // Handle overlay clicks to close
+    const overlays = document.querySelectorAll(".service-overlay");
+    overlays.forEach((overlay) => {
+      overlay.addEventListener("click", () => {
+        const overlayId = overlay.getAttribute("data-overlay-id");
+        closeModal(overlayId);
+      });
+    });
+
+    // Handle modal wrapper clicks (clicking outside modal content)
+    const modals = document.querySelectorAll(".service-modal");
+    modals.forEach((modal) => {
+      modal.addEventListener("click", (e) => {
+        // Only close if clicking the modal wrapper itself, not the content
+        if (e.target === modal) {
+          const modalId = modal.getAttribute("data-modal-id");
+          closeModal(modalId);
+        }
+      });
+    });
+
+    // Handle ESC key to close modal
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const openModal = document.querySelector(
+          ".service-modal.pointer-events-auto"
+        );
+        if (openModal) {
+          const modalId = openModal.getAttribute("data-modal-id");
+          closeModal(modalId);
+        }
+      }
+    });
+
+    function closeModal(serviceId: string | null) {
+      if (!serviceId) return;
+
+      const overlay = document.querySelector(
+        `[data-overlay-id="${serviceId}"]`
+      ) as HTMLElement;
+      const modal = document.querySelector(
+        `[data-modal-id="${serviceId}"]`
+      ) as HTMLElement;
+      const modalContent = modal?.querySelector(
+        ".service-modal-content"
+      ) as HTMLElement;
+
+      if (overlay && modal && modalContent) {
+        // Animate modal content out
+        modalContent.classList.remove("scale-100");
+        modalContent.classList.add("scale-95");
+
+        // Hide overlay and modal
+        setTimeout(() => {
+          overlay.classList.remove("pointer-events-auto", "opacity-100");
+          overlay.classList.add("pointer-events-none", "opacity-0");
+
+          modal.classList.remove("pointer-events-auto", "opacity-100");
+          modal.classList.add("pointer-events-none", "opacity-0");
+
+          // Restore body scroll
+          document.body.style.overflow = "";
+
+          // Show header again
+          const header = document.getElementById("header");
+          if (header) {
+            header.style.display = "";
+          }
+        }, 200);
+      }
+    }
+  });
+</script>
+
+<style>
+  /* Ensure smooth transitions */
+  .service-modal-content {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Prevent text selection on button */
+  .service-card {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Folder hover effect */
+  .folder-icon::before {
+    content: '📁';
+  }
+
+  .service-card:hover .folder-icon::before {
+    content: '📂';
+  }
+
+  /* Custom scrollbar for modal content */
+  .service-modal-content ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  .service-modal-content ::-webkit-scrollbar-track {
+    background: #000000;
+    border-radius: 4px;
+  }
+
+  .service-modal-content ::-webkit-scrollbar-thumb {
+    background: #54ccef;
+    border-radius: 4px;
+  }
+
+  .service-modal-content ::-webkit-scrollbar-thumb:hover {
+    background: #6dd8f7;
+  }
+
+  .service-modal-content ::-webkit-scrollbar-button {
+    background: #54ccef;
+    height: 16px;
+  }
+
+  .service-modal-content ::-webkit-scrollbar-button:hover {
+    background: #6dd8f7;
+  }
+</style>

@@ -1,0 +1,112 @@
+---
+import { siteConfig } from "../config";
+
+const hasServices = siteConfig.services && siteConfig.services.length > 0;
+const hasRecent = siteConfig.recent && siteConfig.recent.length > 0;
+const hasPeople = siteConfig.people && siteConfig.people.length > 0;
+---
+
+<header
+  id="header"
+  class="fixed top-0 left-0 right-0 z-50 hidden md:block transition-all duration-300"
+>
+  <nav class="max-w-7xl mx-auto px-8 py-4">
+    <ul class="flex items-center gap-8 justify-center">
+      <li>
+        <a
+          href="#about"
+          class="nav-link transition-colors font-medium relative text-lg"
+          style="color: #E0E0E0;"
+          onmouseover="this.style.color='#ff4dff'"
+          onmouseout="this.style.color='#E0E0E0'"
+        >
+          About Us
+        </a>
+      </li>
+      {
+        hasServices && (
+          <li>
+            <a
+              href="#services"
+              class="nav-link transition-colors font-medium relative text-lg"
+              style="color: #E0E0E0;"
+              onmouseover="this.style.color='#ff4dff'"
+              onmouseout="this.style.color='#E0E0E0'"
+            >
+              Services
+            </a>
+          </li>
+        )
+      }
+      {
+        hasRecent && (
+          <li>
+            <a
+              href="#recent"
+              class="nav-link transition-colors font-medium relative text-lg"
+              style="color: #E0E0E0;"
+              onmouseover="this.style.color='#ff4dff'"
+              onmouseout="this.style.color='#E0E0E0'"
+            >
+              Recent Projects
+            </a>
+          </li>
+        )
+      }
+      {
+        hasPeople && (
+          <li>
+            <a
+              href="#people"
+              class="nav-link transition-colors font-medium relative text-lg"
+              style="color: #E0E0E0;"
+              onmouseover="this.style.color='#ff4dff'"
+              onmouseout="this.style.color='#E0E0E0'"
+            >
+              People
+            </a>
+          </li>
+        )
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  window.addEventListener("scroll", () => {
+    const header = document.getElementById("header");
+    if (window.scrollY > 100) {
+      header?.style.setProperty("background-color", "rgba(0, 0, 0, 0.9)");
+      header?.style.setProperty("backdrop-filter", "blur(4px)");
+    } else {
+      header?.style.removeProperty("background-color");
+      header?.style.removeProperty("backdrop-filter");
+    }
+  });
+</script>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Navigation link hover effect - dashed line */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.75rem;
+    height: 2px;
+    border-bottom: 2px dashed #ff4dff;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .nav-link:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>

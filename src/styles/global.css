@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+:root {
+  --terminal-black: #000000;
+  --terminal-gray: #E0E0E0;
+  --terminal-blue: #54ccef;
+  --terminal-green: #18eb8f;
+  --terminal-red: #ff8080;
+  --terminal-white: #FFFFFF;
+}
+
+body {
+  font-family: 'Ubuntu Mono', monospace;
+  background-color: var(--terminal-black);
+  color: var(--terminal-gray);
+  overflow-x: hidden;
+}
+
+/* Terminal-style dashed divider */
+.terminal-divider {
+  height: 1px;
+  background: none;
+  border: none;
+  position: relative;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.terminal-divider::before {
+  content: '----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
+  color: var(--terminal-blue);
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  display: block;
+  white-space: nowrap;
+  opacity: 0.6;
+}
+
