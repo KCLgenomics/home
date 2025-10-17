@@ -17,34 +17,6 @@ This portfolio is based on the original structure from [RyanFitzgerald's devport
 The template is designed to be easily customizable through the `src/config.ts` file. This single file controls all content and sections of the portfolio.
 
 ### Configuration Structure
-#### Basic Information
-```typescript
-export const siteConfig = {
-  name: "King's Genomics Bioinformatics",
-  title: "Part of King's Genomics based in Social, Genetic & Developmental Psychiatry Centre, King's College London",
-  description: "Portfolio website of King's Genomics Bioinformatics",
-  accentColor: "#1d4ed8", // Hex color for theme
-}
-```
-
-#### Social Links (all optional)
-```typescript
-social: {
-  email: "kclgenomics@kcl.ac.uk",
-  twitter: "https://x.com/kclgenomics",
-  github: "https://github.com/KCLgenomics",
-}
-```
-
-#### About Section
-```typescript
-aboutMe: "This is the official homepage of the bioinformaticians at King's Genomics! We turn data into discoveries and genomes into stories."
-```
-
-#### Skills
-```typescript
-skills: ["📊 R", "🐍 Python", "☁️ Amazon Web Services", "🧬 Genome Studio", "🐳 Docker", "🔍 Analysis"]
-```
 
 #### Services
 The services section supports nested sub-services with detailed information, to add or remove, you just edit the following block:
