@@ -1,6 +1,19 @@
 ---
 import { siteConfig } from "../config";
 const hasPeople = siteConfig.people && siteConfig.people.length > 0;
+
+// Group people by category
+const peopleByCategory = siteConfig.people?.reduce((acc, person) => {
+  const category = person.category || "Team";
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(person);
+  return acc;
+}, {} as Record<string, typeof siteConfig.people>);
+
+// Define the order of categories
+const categoryOrder = ["Team", "Collaborator"];
 ---
 
 {
@@ -15,89 +28,101 @@ const hasPeople = siteConfig.people && siteConfig.people.length > 0;
           </div>
 
           <div class="lg:col-span-8">
-            {/* People Cards */}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12">
-              {siteConfig.people.map((person) => {
-                const Component = person.profileUrl ? "a" : "div";
-                const linkProps = person.profileUrl
-                  ? {
-                      href: person.profileUrl,
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                    }
-                  : {};
+            {/* People Cards by Category */}
+            {categoryOrder.map((category) => {
+              const people = peopleByCategory?.[category];
+              if (!people || people.length === 0) return null;
 
-                return (
-                  <Component
-                    {...linkProps}
-                    class={`group relative p-6 md:p-8 bg-black rounded-2xl border-2 border-dashed transition-all duration-300 ${
-                      person.profileUrl
-                        ? "hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                        : "opacity-60"
-                    }`}
-                    style="border-color: #54ccef;"
-                  >
-                    {person.profileUrl && (
-                      <div class="absolute top-6 right-6 md:top-8 md:right-8 w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full transition-all duration-300" style="background-color: #54ccef; color: #000000;">
-                        <svg
-                          class="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+              return (
+                <div class="mb-12">
+                  <h3 class="text-2xl md:text-3xl font-bold mb-6" style="color: #54ccef;">
+                    {category}
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    {people.map((person) => {
+                      const Component = person.profileUrl ? "a" : "div";
+                      const linkProps = person.profileUrl
+                        ? {
+                            href: person.profileUrl,
+                            target: "_blank",
+                            rel: "noopener noreferrer",
+                          }
+                        : {};
+
+                      return (
+                        <Component
+                          {...linkProps}
+                          class={`group relative p-6 md:p-8 bg-black rounded-2xl border-2 border-dashed transition-all duration-300 ${
+                            person.profileUrl
+                              ? "hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                              : "opacity-60"
+                          }`}
+                          style="border-color: #54ccef;"
                         >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M7 17L17 7M17 7H7M17 7V17"
-                          />
-                        </svg>
-                      </div>
-                    )}
+                          {person.profileUrl && (
+                            <div class="absolute top-6 right-6 md:top-8 md:right-8 w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full transition-all duration-300" style="background-color: #54ccef; color: #000000;">
+                              <svg
+                                class="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M7 17L17 7M17 7H7M17 7V17"
+                                />
+                              </svg>
+                            </div>
+                          )}
 
-                    <div class="flex flex-col items-center text-center">
-                      {person.image ? (
-                        <div class="w-32 h-32 md:w-40 md:h-40 mb-4 rounded-full overflow-hidden border-4 shadow-lg" style="background-color: #000000; border-color: #54ccef;">
-                          <img
-                            src={person.image}
-                            alt={person.name}
-                            class="w-full h-full object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div class="w-32 h-32 md:w-40 md:h-40 mb-4 rounded-full border-4 shadow-lg flex items-center justify-center" style="background-color: #000000; border-color: #54ccef;">
-                          <svg
-                            class="w-16 h-16 md:w-20 md:h-20"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            style="color: #54ccef;"
-                          >
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                          </svg>
-                        </div>
-                      )}
+                          <div class="flex flex-col items-center text-center">
+                            {person.image ? (
+                              <div class="w-32 h-32 md:w-40 md:h-40 mb-4 rounded-full overflow-hidden border-4 shadow-lg" style="background-color: #000000; border-color: #54ccef;">
+                                <img
+                                  src={person.image}
+                                  alt={person.name}
+                                  class="w-full h-full object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div class="w-32 h-32 md:w-40 md:h-40 mb-4 rounded-full border-4 shadow-lg flex items-center justify-center" style="background-color: #000000; border-color: #54ccef;">
+                                <svg
+                                  class="w-16 h-16 md:w-20 md:h-20"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                  style="color: #54ccef;"
+                                >
+                                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                </svg>
+                              </div>
+                            )}
 
-                      <h3 class="text-xl md:text-2xl font-bold mb-2" style="color: #E0E0E0;">
-                        {person.name}
-                      </h3>
+                            <h3 class="text-xl md:text-2xl font-bold mb-2" style="color: #E0E0E0;">
+                              {person.name}
+                            </h3>
 
-                      <p
-                        class="text-base md:text-lg font-medium mb-3"
-                        style="color: #BEBE15;"
-                      >
-                        {person.title}
-                      </p>
+                            <p
+                              class="text-base md:text-lg font-medium mb-3"
+                              style="color: #BEBE15;"
+                            >
+                              {person.title}
+                            </p>
 
-                      {person.description && (
-                        <p class="text-sm md:text-base" style="color: #E0E0E0;">
-                          {person.description}
-                        </p>
-                      )}
-                    </div>
-                  </Component>
-                );
-              })}
-            </div>
+                            {person.description && (
+                              <p class="text-sm md:text-base" style="color: #E0E0E0;">
+                                {person.description}
+                              </p>
+                            )}
+                          </div>
+                        </Component>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
 
             {/* Microsoft Form Section */}
             {siteConfig.microsoftFormUrl && siteConfig.microsoftFormUrl !== "YOUR_MICROSOFT_FORM_URL_HERE" && (
